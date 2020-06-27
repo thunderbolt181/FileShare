@@ -42,15 +42,38 @@ WindowManager:
 
 <ReceiveScreen>:
     name:"receive"
+    ip:ip
+    port:port
+    username:username
     GridLayout:
         rows:2
-        Label:
-            text:"Receive Screen"
+        GridLayout:
+            cols:2
+            Label:
+                text:"IP"
+            TextInput:
+                id:ip
+                text:root.ip_prev
+                multiline:False
+            Label:
+                text:"port"
+            TextInput:
+                id:port
+                text:root.port_prev
+                multiline:False
+            Label:
+                text:"username"
+            TextInput:
+                id:username
+                text:root.username_prev
+                multiline:False
         GridLayout:
             size_hint_y:0.1
             cols:2
             Button:
                 text:"Receive"
+                on_press:
+                    root.try_connect()
             Button:
                 text:"Back"
                 on_release:
