@@ -1,0 +1,58 @@
+WindowManager:
+    MainScreen:
+    SendScreen:
+    ReceiveScreen:
+
+<MainScreen>:
+    name:"Main"
+    GridLayout:
+        rows:2
+        Label:
+            text:"Main"
+        GridLayout:
+            size_hint_y:0.1
+            cols:2
+            Button:
+                text:"Send"
+                on_release:
+                    app.root.current="send"
+                    root.manager.transition.direction = 'right'
+            Button:
+                text:"Receive"
+                on_release:
+                    app.root.current="receive"
+                    root.manager.transition.direction = 'left'
+
+<SendScreen>:
+    name:"send"
+    GridLayout:
+        rows:2
+        Label:
+            text:"Send Screen"
+        GridLayout:
+            size_hint_y:0.1
+            cols:2
+            Button:
+                text:"Send"
+            Button:
+                text:"Back"
+                on_release:
+                    app.root.current="Main"
+                    root.manager.transition.direction = 'left'
+
+<ReceiveScreen>:
+    name:"receive"
+    GridLayout:
+        rows:2
+        Label:
+            text:"Receive Screen"
+        GridLayout:
+            size_hint_y:0.1
+            cols:2
+            Button:
+                text:"Receive"
+            Button:
+                text:"Back"
+                on_release:
+                    app.root.current="Main"
+                    root.manager.transition.direction = 'right'
