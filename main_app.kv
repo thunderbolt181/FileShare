@@ -94,12 +94,26 @@ WindowManager:
 
 <ReceivingFile>:
     name:"ReceivingFile"
+    cancel_btn:cancel_btn
+    file_name:file_name
+    file_size:file_size
+    file_size_recvd:file_size_recvd
     GridLayout:
-        rows:2
+        cols:1
         Label:
+            id:file_name
             text:"Receiving File Info"
+        GridLayout:
+            cols:2
+            Label:
+                id:file_size
+                text:""
+            Label:
+                id:file_size_recvd
+                text:""
         Button:
             size_hint_y:0.1
+            id:cancel_btn
             text:"CANCEL"
             on_press:
                 root.cancel()

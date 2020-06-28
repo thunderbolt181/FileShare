@@ -14,6 +14,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 T=None
 q=queue.Queue()
 p=queue.Queue()
+r=queue.Queue()
 #:::::::::::::::::::::::::::::::::::::: GLOBAL VARIABLES :::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 #:::::::::::::::::::::::::::::::::::::: RECIVER SOCKET :::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -41,6 +42,9 @@ class ReciverSocket:
     def start_transfer(self):
         time.sleep(1)
         self.filename = self.mysock.recv(2048).decode("utf-8")
+        self.filesize = self.mysock.recv(2048).decode("utf-8")
+        r.put(self.filename)
+        r.put(int(self.filesize)/(1024*1024))
         self.mysock.send(bytes("1","utf-8")) 
         self.start_time = time.time()
         if p.empty():
@@ -51,6 +55,7 @@ class ReciverSocket:
                 self.file.write(self.msg)
                 self.end=time.time()
                 self.data_recvd+=len(self.msg)
+                r.put(self.data_recvd/(1024*1024))
                 print(round(len(self.msg)*0.000001 / (self.end - self.st), 3),'MB/sec.',round(self.data_recvd * 0.000001,3))
                 if not self.msg:
                     break
@@ -59,6 +64,7 @@ class ReciverSocket:
             print('Total:', self.end - self.start_time)
             print('Throughput:', round((self.d * 0.000001) / (self.end - self.start_time), 3),'MB/sec.')
             self.file.close()
+            p.put(True)
             print('Successfully received the file')
             print('connection closed')
         self.mysock.close()
@@ -95,6 +101,8 @@ class ReceiveScreen(Screen):
             q.get()
         while not p.empty():
             p.get()
+        while not r.empty():
+            r.get()
         q.put(self.ids.ip.text)
         q.put(self.ids.port.text)
         q.put(self.ids.username.text)
@@ -109,7 +117,6 @@ class Recv_Sock_Check(Screen):
         Clock.schedule_once(self.check,2)
 
     def check(self,_):
-        print("1",q.empty())
         if not q.empty():
             if q.get():
                 self.manager.current="ReceivingFile"
@@ -125,18 +132,41 @@ class ReceivingFile(Screen):
         super(ReceivingFile,self).__init__(**kwargs)
 
     def on_enter(self):
+        self.ids.file_name.text="RECEIVING FILE INFO"
+        self.ids.file_size.text=""
+        self.ids.file_size_recvd.text=""
+        self.ids.cancel_btn.text="CANCEL"
         Clock.schedule_once(self.close_connection,1)
+        Clock.schedule_once(self.update_info,1)
+
+    def update_info(self,_):
+        if not r.empty():
+            self.ids.file_name.text=str(r.get())
+            self.ids.file_size.text=f"{r.get()} MB"
+            self.ids.file_size_recvd.text="0 MB"
+            Clock.schedule_once(self.updating_recvd_size,1)
+        else:
+            Clock.schedule_once(self.update_info,1)
+
+    def updating_recvd_size(self,_):
+        if not r.empty():
+            self.ids.file_size_recvd.text=f"{r.get()} MB"
+            Clock.schedule_once(self.updating_recvd_size,1)
+        else:
+            Clock.schedule_once(self.updating_recvd_size,1)
 
     def close_connection(self,_):
-        print("2",p.empty())
         if not p.empty():
             if not p.get():
                 self.manager.current="Receive"
                 self.manager.transition.direction="right"
+            else:
+                self.ids.cancel_btn.text="CONTINUE"
         else:
             Clock.schedule_once(self.close_connection,1)
 
     def cancel(self):
+        # if self.ids.cancel_btn.text=="CANCEL":
         p.put(False)
         p.put(False)
 
