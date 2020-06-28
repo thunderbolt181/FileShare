@@ -2,6 +2,8 @@ WindowManager:
     MainScreen:
     SendScreen:
     ReceiveScreen:
+    Recv_Sock_Check:
+    ReceivingFile:
 
 <MainScreen>:
     name:"Main"
@@ -15,16 +17,16 @@ WindowManager:
             Button:
                 text:"Send"
                 on_release:
-                    app.root.current="send"
+                    app.root.current="Send"
                     root.manager.transition.direction = 'right'
             Button:
                 text:"Receive"
                 on_release:
-                    app.root.current="receive"
+                    app.root.current="Receive"
                     root.manager.transition.direction = 'left'
 
 <SendScreen>:
-    name:"send"
+    name:"Send"
     GridLayout:
         rows:2
         Label:
@@ -41,7 +43,7 @@ WindowManager:
                     root.manager.transition.direction = 'left'
 
 <ReceiveScreen>:
-    name:"receive"
+    name:"Receive"
     ip:ip
     port:port
     username:username
@@ -74,8 +76,33 @@ WindowManager:
                 text:"Receive"
                 on_press:
                     root.try_connect()
+                on_release:
+                    app.root.current="Recv_Sock_Check"
+                    root.manager.transition.direction = 'left'
             Button:
                 text:"Back"
                 on_release:
                     app.root.current="Main"
                     root.manager.transition.direction = 'right'
+
+<Recv_Sock_Check>:
+    name:"Recv_Sock_Check"
+    GridLayout:
+        rows:2
+        Label:
+            text:"CONNECTING"
+
+<ReceivingFile>:
+    name:"ReceivingFile"
+    GridLayout:
+        rows:2
+        Label:
+            text:"Receiving File Info"
+        Button:
+            size_hint_y:0.1
+            text:"CANCEL"
+            on_press:
+                root.cancel()
+            on_release:
+                app.root.current="Receive"
+                root.manager.transition.direction = 'right'
