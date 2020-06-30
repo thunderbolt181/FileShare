@@ -1,9 +1,11 @@
 WindowManager:
     MainScreen:
     SendScreen:
+    SendFile:
     ReceiveScreen:
     Recv_Sock_Check:
     ReceivingFile:
+    Filechooser:
 
 <MainScreen>:
     name:"Main"
@@ -17,29 +19,12 @@ WindowManager:
             Button:
                 text:"Send"
                 on_release:
-                    app.root.current="Send"
+                    app.root.current="Filechooser"
                     root.manager.transition.direction = 'right'
             Button:
                 text:"Receive"
                 on_release:
                     app.root.current="Receive"
-                    root.manager.transition.direction = 'left'
-
-<SendScreen>:
-    name:"Send"
-    GridLayout:
-        rows:2
-        Label:
-            text:"Send Screen"
-        GridLayout:
-            size_hint_y:0.1
-            cols:2
-            Button:
-                text:"Send"
-            Button:
-                text:"Back"
-                on_release:
-                    app.root.current="Main"
                     root.manager.transition.direction = 'left'
 
 <ReceiveScreen>:
@@ -73,17 +58,17 @@ WindowManager:
             size_hint_y:0.1
             cols:2
             Button:
+                text:"Back"
+                on_release:
+                    app.root.current="Main"
+                    root.manager.transition.direction = 'right'
+            Button:
                 text:"Receive"
                 on_press:
                     root.try_connect()
                 on_release:
                     app.root.current="Recv_Sock_Check"
                     root.manager.transition.direction = 'left'
-            Button:
-                text:"Back"
-                on_release:
-                    app.root.current="Main"
-                    root.manager.transition.direction = 'right'
 
 <Recv_Sock_Check>:
     name:"Recv_Sock_Check"
@@ -112,7 +97,7 @@ WindowManager:
                 id:file_size_recvd
                 text:""
         Button:
-            size_hint_y:0.1
+            size_hint_y:0.5
             id:cancel_btn
             text:"CANCEL"
             on_press:
@@ -120,3 +105,85 @@ WindowManager:
             on_release:
                 app.root.current="Receive"
                 root.manager.transition.direction = 'right'
+
+<SendScreen>:
+    name:"Send"
+    device_ip:device_ip
+    starting_server:starting_server
+    server_timeout:server_timeout
+    server_timeout_time:server_timeout_time
+    GridLayout:
+        rows:3
+        Label:
+            id:starting_server
+            text:"STARTING SERVERR"
+        Label:
+            id:device_ip
+            text:""
+        GridLayout:
+            cols:2
+            Label:
+                id:server_timeout
+                text:""
+            Label:
+                id:server_timeout_time
+                text:""
+
+<SendFile>:
+    name:"SendFile"
+    c_btn:c_btn
+    file_size:file_size
+    file_name_send:file_name_send
+    file_size_send:file_size_send
+    GridLayout:
+        rows:2
+        Label:
+            id:file_name_send
+            text:"CONNECTED"
+        GridLayout:
+            cols:2
+            Label:
+                id:file_size
+                text:""
+            Label:
+                id:file_size_send
+                text:""
+    Button:
+        size_hint_y:0.1
+        id:c_btn
+        text:"CANCEL"
+        on_press:
+            root.cancel_send()
+        on_release:
+            app.root.current="Main"
+            root.manager.transition.direction = 'left'
+
+<Filechooser>:
+    name:"Filechooser"
+    orientation: 'vertical'
+    GridLayout:
+        rows:3
+        BoxLayout:
+            FileChooserIconView:
+                # multiselect:True # To enabel multi selection
+                path: root.paths
+                canvas.before:
+                    Color:
+                        rgb: .5, .4, .5
+                on_selection: root.select(*args)
+        GridLayout:
+            cols:3
+            size_hint_y:0.2
+            Button:
+                text:"CONTINUE"
+                on_release:
+                    root.selected_files()
+            Button:
+                text:"Select Drives"
+                on_release:
+                    root.popup_btn()
+            Button:
+                text:"BACK"
+                on_release:
+                    app.root.current="Main"
+                    root.manager.transition.direction = 'left'
