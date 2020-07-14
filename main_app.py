@@ -1,10 +1,15 @@
 import kivy
+import enchant
+import cv2
+from picamera import PiCamera
+from kivy.core.spelling import Spelling
 import os
 import socket
 import time
 import queue
 import threading
 from kivy.app import App
+from kivy.utils import platform
 from kivy.uix.boxlayout import BoxLayout 
 from kivy.uix.popup import Popup
 from kivy.properties import StringProperty,ObjectProperty
@@ -13,10 +18,6 @@ from kivy.uix.button import Button
 from kivy.clock import Clock
 from kivy.lang.builder import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
-
-#:::::::::::::::::::::::::::::::::::::: GLOBAL VARIABLES :::::::::::::::::::::::::::::::::::::::::::::::::::::::
-#  Problem occurs during sending file name and file size
-#:::::::::::::::::::::::::::::::::::::: GLOBAL VARIABLES :::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 #:::::::::::::::::::::::::::::::::::::: GLOBAL VARIABLES :::::::::::::::::::::::::::::::::::::::::::::::::::::::
 q=queue.Queue()
@@ -270,8 +271,9 @@ class Filechooser(BoxLayout,Screen):
     paths=StringProperty()
     def __init__(self,**kwargs):
         super(Filechooser,self).__init__(**kwargs)
-        self.paths="C:/"
         self.select_file_name=""
+        if platform == "win":
+            self.paths="C:/"
 
     def on_enter(self):
         global files
@@ -301,7 +303,8 @@ class Filechooser(BoxLayout,Screen):
 
     def popup_btn(self):
         self.drives=[]
-        self.drives = [chr(x) for x in range(65,90) if os.path.exists(chr(x) + ":") ]
+        if platform =="win":
+            self.drives = [chr(x) for x in range(65,90) if os.path.exists(chr(x) + ":") ]
         self.layout = GridLayout(cols = 1, padding = 10)
         popupwindow=Popup(title="Select Drives",content=self.layout,size_hint=(0.7,0.5))
         popupwindow.open()

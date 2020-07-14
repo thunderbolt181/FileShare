@@ -12,16 +12,19 @@ WindowManager:
     GridLayout:
         rows:2
         Label:
+            font_size:13
             text:"Main"
         GridLayout:
             size_hint_y:0.1
             cols:2
             Button:
+                font_size:13
                 text:"Send"
                 on_release:
                     app.root.current="Filechooser"
                     root.manager.transition.direction = 'right'
             Button:
+                font_size:13
                 text:"Receive"
                 on_release:
                     app.root.current="Receive"
@@ -37,20 +40,26 @@ WindowManager:
         GridLayout:
             cols:2
             Label:
+                font_size:13
                 text:"IP"
             TextInput:
                 id:ip
+                font_size:13
                 text:root.ip_prev
                 multiline:False
             Label:
+                font_size:13
                 text:"port"
             TextInput:
+                font_size:13
                 id:port
                 text:root.port_prev
                 multiline:False
             Label:
+                font_size:13
                 text:"username"
             TextInput:
+                font_size:13
                 id:username
                 text:root.username_prev
                 multiline:False
@@ -58,11 +67,13 @@ WindowManager:
             size_hint_y:0.1
             cols:2
             Button:
+                font_size:13
                 text:"Back"
                 on_release:
                     app.root.current="Main"
                     root.manager.transition.direction = 'right'
             Button:
+                font_size:13
                 text:"Receive"
                 on_press:
                     root.try_connect()
@@ -75,6 +86,7 @@ WindowManager:
     GridLayout:
         rows:2
         Label:
+            font_size:13
             text:"CONNECTING"
 
 <ReceivingFile>:
@@ -86,17 +98,21 @@ WindowManager:
     GridLayout:
         cols:1
         Label:
+            font_size:13
             id:file_name
             text:"Receiving File Info"
         GridLayout:
             cols:2
             Label:
+                font_size:13
                 id:file_size
                 text:""
             Label:
+                font_size:13
                 id:file_size_recvd
                 text:""
         Button:
+            font_size:13
             size_hint_y:0.5
             id:cancel_btn
             text:"CANCEL"
@@ -115,17 +131,21 @@ WindowManager:
     GridLayout:
         rows:3
         Label:
+            font_size:13
             id:starting_server
             text:"STARTING SERVERR"
         Label:
+            font_size:13
             id:device_ip
             text:""
         GridLayout:
             cols:2
             Label:
+                font_size:13
                 id:server_timeout
                 text:""
             Label:
+                font_size:13
                 id:server_timeout_time
                 text:""
 
@@ -138,17 +158,21 @@ WindowManager:
     GridLayout:
         rows:2
         Label:
+            font_size:13
             id:file_name_send
             text:"CONNECTED"
         GridLayout:
             cols:2
             Label:
+                font_size:13
                 id:file_size
                 text:""
             Label:
+                font_size:13
                 id:file_size_send
                 text:""
     Button:
+        font_size:13
         size_hint_y:0.1
         id:c_btn
         text:"CANCEL"
@@ -175,14 +199,17 @@ WindowManager:
             cols:3
             size_hint_y:0.2
             Button:
+                font_size:13
                 text:"CONTINUE"
                 on_release:
                     root.selected_files()
             Button:
+                font_size:13
                 text:"Select Drives"
                 on_release:
                     root.popup_btn()
             Button:
+                font_size:13
                 text:"BACK"
                 on_release:
                     app.root.current="Main"
