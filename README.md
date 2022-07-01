@@ -4,7 +4,6 @@
 
 - <b><i> This project is completely built on PYTHON</i></b>
 - <b><i> More suggestion are welcome</i></b>
-- <i>NEED HELP IN PORTING IT TO ANDROID</i>
 
 ## Features
 - Built in file Explorer
