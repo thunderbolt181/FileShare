@@ -1,6 +1,5 @@
 import kivy
 import enchant
-import cv2
 from kivy.core.spelling import Spelling
 from pathlib import Path
 import os

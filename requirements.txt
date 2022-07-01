@@ -8,7 +8,6 @@ kivy-deps.glew==0.3.1
 kivy-deps.sdl2==0.4.5
 Kivy-Garden==0.1.5
 numpy==1.23.0
-opencv-python==4.6.0.66
 pyenchant==3.2.2
 Pygments==2.12.0
 pypiwin32==223
