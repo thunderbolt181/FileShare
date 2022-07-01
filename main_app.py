@@ -1,8 +1,8 @@
 import kivy
 import enchant
 import cv2
-from picamera import PiCamera
 from kivy.core.spelling import Spelling
+from pathlib import Path
 import os
 import socket
 import time
@@ -24,6 +24,7 @@ q=queue.Queue()
 p=queue.Queue()
 r=queue.Queue()
 files=queue.Queue()
+downloads_path = str(Path.home() / "Downloads")
 #:::::::::::::::::::::::::::::::::::::: GLOBAL VARIABLES :::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 #:::::::::::::::::::::::::::::::::::::: RECIVER SOCKET :::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -59,7 +60,7 @@ class ReciverSocket:
         while not p.empty():
             p.get()
         if p.empty():
-            self.file = open(f"C:\\Users\\Shivam Baghel\\Desktop\\{self.filename}", "wb")
+            self.file = open(f"{downloads_path}\\{self.filename}", "wb")
             while p.empty():
                 self.st=time.time()
                 self.msg = self.mysock.recv(self.SIZE)
@@ -70,15 +71,13 @@ class ReciverSocket:
                 # print(round(len(self.msg)*0.000001 / (self.end - self.st), 3),'MB/sec.',round(self.data_recvd * 0.000001,3))
                 if not self.msg:
                     break
-            self.d = os.path.getsize(f"C:\\Users\\Shivam Baghel\\Desktop\\{self.filename}")
+            self.d = os.path.getsize(f"{downloads_path}\\{self.filename}")
             # print(self.d*0.000001)
             # print('Total:', self.end - self.start_time)
             # print('Throughput:', round((self.d * 0.000001) / (self.end - self.start_time), 3),'MB/sec.')
             self.file.close()
             p.put(True)
             print("Completed")
-            # print('Successfully received the file')
-            # print('connection closed')
         self.mysock.close()
 
 #:::::::::::::::::::::::::::::::::::::: RECIVER SOCKET :::::::::::::::::::::::::::::::::::::::::::::::::::::::
